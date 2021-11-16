@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +23,21 @@ public class UserService implements UserDetailsService{
 	@Autowired
 	private UserRepository repository;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	@Transactional(readOnly = true)
 	public Page<User> findAllPaged(Pageable pageable){
 		Page<User> page = repository.findAll(pageable);
 		return page;
+	}
+	
+	@Transactional
+	public User NewUser(User user) {
+		User userInsert = user;
+		userInsert.setPassword(passwordEncoder.encode(user.getPassword()));
+		repository.save(userInsert);
+		return userInsert;
 	}
 
 	@Override
@@ -39,4 +51,5 @@ public class UserService implements UserDetailsService{
 		logger.info("username found: " + username);
 		return user;
 	}
+	
 }
