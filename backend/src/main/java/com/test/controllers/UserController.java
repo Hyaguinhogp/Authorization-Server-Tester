@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.test.components.JwtTokenEnhancer;
 import com.test.entities.User;
 import com.test.services.UserService;
 
@@ -20,9 +21,17 @@ public class UserController {
 	@Autowired
 	private UserService service;
 	
+	@Autowired
+	private JwtTokenEnhancer tokenEnhancer;
+	
 	@GetMapping
 	public ResponseEntity<Page<User>> findAdd(Pageable pageable){
 		return ResponseEntity.ok().body(service.findAllPaged(pageable));
+	}
+	
+	@GetMapping(path = "/profile")
+	public ResponseEntity<User> findProfile(){
+		return ResponseEntity.ok().body(tokenEnhancer.getUser());
 	}
 	
 	@PostMapping

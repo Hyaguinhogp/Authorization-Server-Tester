@@ -18,6 +18,12 @@ public class JwtTokenEnhancer implements TokenEnhancer{
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	User user;
+	
+	public User getUser() {
+		return user;
+	}
 
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
@@ -30,6 +36,8 @@ public class JwtTokenEnhancer implements TokenEnhancer{
 		
 		DefaultOAuth2AccessToken token = (DefaultOAuth2AccessToken) accessToken;
 		token.setAdditionalInformation(map);
+		
+		this.user = user;
 		
 		return token;
 	}
