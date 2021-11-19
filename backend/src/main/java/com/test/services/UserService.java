@@ -27,6 +27,11 @@ public class UserService implements UserDetailsService{
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Transactional(readOnly = true)
+	public User findByName(String name) {
+		return repository.findByName(name);
+	}
+	
+	@Transactional(readOnly = true)
 	public Page<User> findAllPaged(Pageable pageable){
 		Page<User> page = repository.findAll(pageable);
 		return page;
