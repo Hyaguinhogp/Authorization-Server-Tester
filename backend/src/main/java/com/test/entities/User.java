@@ -108,4 +108,11 @@ public class User implements Serializable, UserDetails{
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
+	public boolean hasRole(String userRole) {
+		for(Role role : roles) {
+			if(userRole == role.getAuthority())return true;
+		}
+		return false;
+	}
 }
